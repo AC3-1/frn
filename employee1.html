@@ -30,7 +30,7 @@
       display: flex !important;
       flex-direction: row !important;
       gap: 30px !important;
-      max-width: 1890px !important;
+      max-width: 1800px !important;
       margin: 0 auto !important;
       padding: 0 20px !important;
     }
@@ -273,9 +273,9 @@
                   <select id="day" required>
                     <option value="">Select Day</option>
                     <option value="Mon">Monday</option>
-                    <option value="Tues">Tuesday</option>
-                    <option value="Weds">Wednesday</option>
-                    <option value="Thurs">Thursday</option>
+                    <option value="Tue">Tuesday</option>
+                    <option value="Wed">Wednesday</option>
+                    <option value="Thu">Thursday</option>
                     <option value="Fri">Friday</option>
                     <option value="Sat">Saturday</option>
                     <option value="Sun">Sunday</option>
@@ -459,20 +459,15 @@
           const startCell = document.querySelector(`#schedule-table td[data-day="${assignment.day}"][data-time="${assignment.startTime}"]`);
           if (!startCell) return;
           
-          // NEW APPROACH: Collect all cells that this assignment spans
-          const cells = [];
-          for (let i = startIndex; i < endIndex; i++) {
-            const cell = document.querySelector(`#schedule-table td[data-day="${assignment.day}"][data-row-index="${i}"]`);
-            if (cell) cells.push(cell);
-          }
-          
-          if (cells.length === 0) return;
+          // Find the last cell before the end time
+          const lastCell = document.querySelector(`#schedule-table td[data-day="${assignment.day}"][data-row-index="${endIndex - 1}"]`);
+          if (!lastCell) return;
           
           // Get the exact cell measurements
           const cellHeight = startCell.offsetHeight;
           
-          // NEW CALCULATION: Calculate the total height based on the actual cells
-          const totalHeight = cells.length * cellHeight;
+          // Calculate the total height based on the number of cells
+          const totalHeight = (endIndex - startIndex) * cellHeight;
           
           // Create a single assignment block
           const block = document.createElement('div');
