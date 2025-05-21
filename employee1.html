@@ -1,93 +1,602 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Employee Scheduler</title>
-  <link rel="stylesheet" href="employee1.css" />
+  <link rel="stylesheet" href="employee1.css">
+  <style>
+    /* Enhanced styling for the side-by-side layout */
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #000000, #1f2937);
+      color: #f9fafb;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    header {
+      text-align: center;
+      margin: 20px 0 40px;
+    }
+    
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 600;
+    }
+    
+    .scheduler-container {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 30px !important;
+      max-width: 1890px !important;
+      margin: 0 auto !important;
+      padding: 0 20px !important;
+    }
+    
+    .form-section {
+      flex: 1 !important;
+      background-color: white;
+      padding: 30px !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+      height: fit-content !important;
+    }
+    
+    .schedule-section {
+      flex: 2 !important;
+      background-color: white;
+      padding: 30px !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+      overflow-x: auto !important;
+    }
+    
+    .form-section h2, .schedule-section h2 {
+      color: #1f2937 !important;
+      text-align: center !important;
+      margin-bottom: 25px !important;
+      font-size: 1.8rem !important;
+      font-weight: 600 !important;
+    }
+    
+    .form-group {
+      margin-bottom: 20px !important;
+    }
+    
+    .form-group label {
+      display: block !important;
+      margin-bottom: 8px !important;
+      color: #1f2937 !important;
+      font-weight: 500 !important;
+      font-size: 1rem !important;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 95% !important;
+      padding: 12px !important;
+      border: 1px solid #ddd !important;
+      border-radius: 6px !important;
+      font-size: 1rem !important;
+      transition: border-color 0.3s !important;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none !important;
+      border-color: #1f2937 !important;
+      box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.2) !important;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #000000, #1f2937) !important;
+      color: white !important;
+      border: none !important;
+      padding: 14px 20px !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      font-size: 1rem !important;
+      font-weight: 500 !important;
+      margin-top: 15px !important;
+      transition: all 0.3s !important;
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #1f2937, #000000) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      color: #1f2937 !important;
+      border-radius: 8px !important;
+      overflow: hidden !important;
+      position: relative !important;
+    }
+    
+    th, td {
+      border: 1px solid #e5e7eb !important;
+      padding: 12px !important;
+      text-align: center !important;
+      position: relative !important;
+      height: 50px !important;
+    }
+    
+    th {
+      background: linear-gradient(135deg, #000000, #1f2937) !important;
+      color: white !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      font-size: 0.9rem !important;
+      letter-spacing: 0.5px !important;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9fafb !important;
+    }
+    
+    .assignment-block {
+      background-color: #FFEB3B !important;
+      color: #333 !important;
+      padding: 5px !important;
+      border-radius: 0 !important;
+      font-weight: bold !important;
+      cursor: pointer !important;
+      box-shadow: none !important;
+      transition: all 0.3s !important;
+      position: absolute !important;
+      z-index: 5 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      font-size: 0.85rem !important;
+      line-height: 1.2 !important;
+      border-left: 4px solid #eab308 !important;
+      box-sizing: border-box !important;
+    }
+    
+    .assignment-block:hover {
+      background-color: #FDD835 !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+      z-index: 10 !important;
+    }
+    
+    /* Time column styling */
+    .time-column {
+      font-weight: 500 !important;
+      background-color: #f3f4f6 !important;
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 2 !important;
+    }
+    
+    /* Schedule table container with fixed height and scrolling */
+    .schedule-container {
+      max-height: 600px !important;
+      overflow-y: auto !important;
+      overflow-x: auto !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+      position: relative !important;
+    }
+    
+    /* Sticky header */
+    thead th {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 10 !important;
+    }
+    
+    /* Form layout improvements */
+    .form-row {
+      display: flex !important;
+      gap: 15px !important;
+      margin-bottom: 20px !important;
+    }
+    
+    .form-col {
+      flex: 1 !important;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 992px) {
+      .scheduler-container {
+        flex-direction: column !important;
+      }
+      
+      .form-section {
+        margin-bottom: 30px !important;
+      }
+      
+      .form-row {
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem !important;
+      }
+      
+      .form-section, .schedule-section {
+        padding: 20px !important;
+      }
+      
+      .form-section h2, .schedule-section h2 {
+        font-size: 1.5rem !important;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-    <div class="container nav-container">
-      <a href = "front.html"><div class="logo">frn.</div> </a>
-      <div class="menu-toggle" id="menuToggle">&#9776;</div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
+  <nav id="main-navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-logo">frn.</a>
+      <div class="navbar-menu-toggle" id="menuToggle">&#9776;</div>
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="register.html">Register</a></li>
+        <li><a href="login.html">Login</a></li>
         <li><a href="#programs">Programs</a></li>
-        <li><a href="#journal">Journal</a></li>
+        <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
   </nav>
   <header>
-    <h1> <center> Employee Scheduling</h1></center>
+    <h1>Employee Scheduling</h1>
   </header>
 
   <main>
-   <section class="scheduler fade-in" id="scheduler">
-  <div class="form-section">
-    <h2>Assign Shift</h2>
-    <form id="shift-form">
-      <input type="text" id="employee-name" placeholder="Employee Name" required />
-      <select id="day">
-        <option value="">Select Day</option>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-      </select>
-      <select id="shift">
-        <option value="">Select Shift</option>
-        <option value="Morning">Morning</option>
-        <option value="Afternoon">Afternoon</option>
-        <option value="Evening">Evening</option>
-      </select>
-      <button type="submit">Assign</button>
-    </form>
-  </div>
+    <section class="scheduler fade-in" id="scheduler">
+      <div class="scheduler-container">
+        <div class="form-section">
+          <h2>Assign Shift</h2>
+          <form id="shift-form">
+            <div class="form-group">
+              <label for="employee-name">Employee Name</label>
+              <input type="text" id="employee-name" placeholder="Enter employee name" required>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="day">Day</label>
+                  <select id="day" required>
+                    <option value="">Select Day</option>
+                    <option value="Mon">Monday</option>
+                    <option value="Tues">Tuesday</option>
+                    <option value="Weds">Wednesday</option>
+                    <option value="Thurs">Thursday</option>
+                    <option value="Fri">Friday</option>
+                    <option value="Sat">Saturday</option>
+                    <option value="Sun">Sunday</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="start-time">Start Time</label>
+                  <select id="start-time" required>
+                    <option value="">Select Start Time</option>
+                    <!-- Will be populated by JavaScript -->
+                  </select>
+                </div>
+              </div>
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="end-time">End Time</label>
+                  <select id="end-time" required>
+                    <option value="">Select End Time</option>
+                    <!-- Will be populated by JavaScript -->
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <button type="submit">Assign Shift</button>
+          </form>
+        </div>
 
-  <div class="schedule-section">
-    <h2>Weekly Schedule</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Day</th>
-          <th>Morning</th>
-          <th>Afternoon</th>
-          <th>Evening</th>
-        </tr>
-      </thead>
-      <tbody id="schedule-table">
-        <tr><td>Monday</td><td></td><td></td><td></td></tr>
-        <tr><td>Tuesday</td><td></td><td></td><td></td></tr>
-        <tr><td>Wednesday</td><td></td><td></td><td></td></tr>
-        <tr><td>Thursday</td><td></td><td></td><td></td></tr>
-        <tr><td>Friday</td><td></td><td></td><td></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+        <div class="schedule-section">
+          <h2>Weekly Schedule</h2>
+          <div class="schedule-container">
+            <table id="schedule-table">
+              <thead>
+                <tr>
+                  <th>TIME</th>
+                  <th>MON</th>
+                  <th>TUE</th>
+                  <th>WED</th>
+                  <th>THU</th>
+                  <th>FRI</th>
+                  <th>SAT</th>
+                  <th>SUN</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-body">
+                <!-- Will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
-    document.getElementById("shift-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = document.getElementById("employee-name").value.trim();
-      const day = document.getElementById("day").value;
-      const shift = document.getElementById("shift").value;
-
-      if (!name || !day || !shift) return;
-
-      const rows = document.querySelectorAll("#schedule-table tr");
-      rows.forEach(row => {
-        if (row.children[0].textContent === day) {
-          const shiftIndex = { Morning: 1, Afternoon: 2, Evening: 3 };
-          row.children[shiftIndex[shift]].textContent = name;
+    document.addEventListener('DOMContentLoaded', function() {
+      // Generate time slots from 5am to 10pm in 30-minute increments
+      function generateTimeSlots() {
+        const slots = [];
+        for (let hour = 5; hour <= 22; hour++) {
+          for (let min = 0; min < 60; min += 30) {
+            const period = hour < 12 ? 'AM' : 'PM';
+            const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+            const displayMin = min === 0 ? '00' : min;
+            slots.push(`${displayHour}:${displayMin} ${period}`);
+          }
+        }
+        return slots;
+      }
+      
+      const timeSlots = generateTimeSlots();
+      const days = ['Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat', 'Sun'];
+      const dayIndices = {
+        'Mon': 1, 'Tues': 2, 'Weds': 3, 'Thurs': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7
+      };
+      
+      // Initialize schedule
+      let schedule = {
+        assignments: []
+      };
+      
+      // Load schedule from localStorage
+      const savedSchedule = localStorage.getItem('employeeSchedule');
+      if (savedSchedule) {
+        schedule = JSON.parse(savedSchedule);
+        if (!schedule.assignments) {
+          schedule.assignments = [];
+        }
+      }
+      
+      // Populate time dropdowns
+      const startTimeSelect = document.getElementById('start-time');
+      const endTimeSelect = document.getElementById('end-time');
+      
+      // Populate start time dropdown
+      timeSlots.forEach((time, index) => {
+        if (index < timeSlots.length - 1) { // Exclude the last time slot
+          const option = document.createElement('option');
+          option.value = time;
+          option.textContent = time;
+          startTimeSelect.appendChild(option);
         }
       });
-
-      document.getElementById("shift-form").reset();
+      
+      // Update end time options when start time changes
+      startTimeSelect.addEventListener('change', function() {
+        const startIndex = timeSlots.indexOf(this.value);
+        
+        // Clear end time options
+        endTimeSelect.innerHTML = '<option value="">Select End Time</option>';
+        
+        // Add only times after the selected start time
+        for (let i = startIndex + 1; i < timeSlots.length; i++) {
+          const option = document.createElement('option');
+          option.value = timeSlots[i];
+          option.textContent = timeSlots[i];
+          endTimeSelect.appendChild(option);
+        }
+        
+        // Reset end time selection
+        endTimeSelect.value = '';
+      });
+      
+      // Create schedule table
+      function createScheduleTable() {
+        const tableBody = document.getElementById('schedule-body');
+        tableBody.innerHTML = '';
+        
+        timeSlots.forEach((time, index) => {
+          const row = document.createElement('tr');
+          row.setAttribute('data-row-index', index.toString());
+          
+          // Add time cell
+          const timeCell = document.createElement('td');
+          timeCell.textContent = time;
+          timeCell.className = 'time-column';
+          row.appendChild(timeCell);
+          
+          // Add day cells
+          days.forEach(day => {
+            const dayCell = document.createElement('td');
+            dayCell.setAttribute('data-day', day);
+            dayCell.setAttribute('data-time', time);
+            dayCell.setAttribute('data-row-index', index.toString());
+            dayCell.setAttribute('data-col-index', dayIndices[day].toString());
+            row.appendChild(dayCell);
+          });
+          
+          tableBody.appendChild(row);
+        });
+        
+        // Display assignments
+        displayAssignments();
+      }
+      
+      // Display assignments on the table
+      function displayAssignments() {
+        // Clear all existing assignment blocks
+        document.querySelectorAll('.assignment-block').forEach(block => {
+          block.remove();
+        });
+        
+        // Get the table and container elements
+        const table = document.getElementById('schedule-table');
+        const container = document.querySelector('.schedule-container');
+        
+        // Add assignments to the table
+        schedule.assignments.forEach(assignment => {
+          const startIndex = timeSlots.indexOf(assignment.startTime);
+          const endIndex = timeSlots.indexOf(assignment.endTime);
+          const dayIndex = dayIndices[assignment.day];
+          
+          if (startIndex === -1 || endIndex === -1) return;
+          
+          // Get the starting cell
+          const startCell = document.querySelector(`#schedule-table td[data-day="${assignment.day}"][data-time="${assignment.startTime}"]`);
+          if (!startCell) return;
+          
+          // NEW APPROACH: Collect all cells that this assignment spans
+          const cells = [];
+          for (let i = startIndex; i < endIndex; i++) {
+            const cell = document.querySelector(`#schedule-table td[data-day="${assignment.day}"][data-row-index="${i}"]`);
+            if (cell) cells.push(cell);
+          }
+          
+          if (cells.length === 0) return;
+          
+          // Get the exact cell measurements
+          const cellHeight = startCell.offsetHeight;
+          
+          // NEW CALCULATION: Calculate the total height based on the actual cells
+          const totalHeight = cells.length * cellHeight;
+          
+          // Create a single assignment block
+          const block = document.createElement('div');
+          block.className = 'assignment-block';
+          block.textContent = `${assignment.name} (${assignment.startTime} - ${assignment.endTime})`;
+          block.setAttribute('data-id', assignment.id);
+          
+          // Generate a color based on the employee name
+          const hue = stringToHue(assignment.name);
+          block.style.backgroundColor = `hsl(${hue}, 90%, 85%)`;
+          block.style.borderLeft = `4px solid hsl(${hue}, 90%, 60%)`;
+          
+          // Position the block precisely at the cell location
+          block.style.position = 'absolute';
+          block.style.left = `${startCell.offsetLeft}px`;
+          block.style.top = `${startCell.offsetTop}px`;
+          block.style.width = `${startCell.offsetWidth}px`;
+          block.style.height = `${totalHeight}px`;
+          
+          // Add click event to remove assignment
+          block.addEventListener('click', function() {
+            if (confirm('Remove this assignment?')) {
+              removeAssignment(assignment.id);
+            }
+          });
+          
+          // Append the block to the container
+          container.appendChild(block);
+        });
+      }
+      
+      // Generate a consistent hue from a string (for color coding by employee)
+      function stringToHue(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return hash % 360;
+      }
+      
+      // Remove an assignment
+      function removeAssignment(id) {
+        schedule.assignments = schedule.assignments.filter(a => a.id !== id);
+        saveSchedule();
+        displayAssignments();
+      }
+      
+      // Generate a unique ID
+      function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+      }
+      
+      // Save schedule to localStorage
+      function saveSchedule() {
+        localStorage.setItem('employeeSchedule', JSON.stringify(schedule));
+      }
+      
+      // Handle form submission
+      document.getElementById('shift-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('employee-name').value.trim();
+        const day = document.getElementById('day').value;
+        const startTime = document.getElementById('start-time').value;
+        const endTime = document.getElementById('end-time').value;
+        
+        if (!name || !day || !startTime || !endTime) {
+          return;
+        }
+        
+        // Check for conflicts
+        const startIndex = timeSlots.indexOf(startTime);
+        const endIndex = timeSlots.indexOf(endTime);
+        let hasConflict = false;
+        
+        for (let i = startIndex; i < endIndex; i++) {
+          const time = timeSlots[i];
+          const conflictingAssignments = schedule.assignments.filter(a => 
+            a.day === day && 
+            timeSlots.indexOf(a.startTime) <= i && 
+            timeSlots.indexOf(a.endTime) > i
+          );
+          
+          if (conflictingAssignments.length > 0) {
+            hasConflict = true;
+            break;
+          }
+        }
+        
+        if (hasConflict) {
+          alert('There is already an assignment during this time period.');
+          return;
+        }
+        
+        // Add new assignment
+        const newAssignment = {
+          id: generateId(),
+          name: name,
+          day: day,
+          startTime: startTime,
+          endTime: endTime
+        };
+        
+        schedule.assignments.push(newAssignment);
+        saveSchedule();
+        displayAssignments();
+        
+        // Reset form
+        this.reset();
+        endTimeSelect.innerHTML = '<option value="">Select End Time</option>';
+      });
+      
+      // Update assignments when window is resized
+      window.addEventListener('resize', function() {
+        displayAssignments();
+      });
+      
+      // Initialize
+      createScheduleTable();
+      
+      // Redraw assignments when the table container is scrolled
+      document.querySelector('.schedule-container').addEventListener('scroll', function() {
+        displayAssignments();
+      });
     });
   </script>
 </body>

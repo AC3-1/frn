@@ -1,125 +1,86 @@
-/* Base Reset */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #000000, #1f2937);
-  color: #f9fafb;
-  min-height: 100vh;
-}
-header {
-  margin-top: 20px;
-}
 /* Navbar */
-.navbar {
+#main-navbar {
   background-color: #1f2937;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem; /* Increased padding for height */
   position: sticky;
   top: 0;
+  margin: 0;
   z-index: 1000;
 }
 
-.nav-container {
+.navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.logo {
-  font-size: 1.8rem;
+.navbar-logo {
+  font-size: 1.8rem; /* Larger logo */
   font-weight: bold;
-  color:linear-gradient(135deg, #000000, #1f2937);
+  color: #facc15;
+
 }
 
-.nav-links {
+.navbar-links {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 1.5rem; /* Increased gap between links */
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links li a {
+.navbar-links li a {
   text-decoration: none;
   color: #f9fafb;
   font-weight: 500;
   transition: color 0.3s;
 }
 
-.nav-links li a:hover {
-  color: linear-gradient(135deg, #000000, #1f2937);
+.navbar-links li a:hover {
+  color: #facc15;
 }
 
-.menu-toggle {
+.navbar-menu-toggle {
   display: none;
-}
-
-.scheduler {
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #000000, #1f2937);
-
-}
-
-.form-section,
-.schedule-section {
-  max-width: 800px;
-  margin: 0 auto 2rem;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.scheduler h2 {
-  text-align: center;
-  color:#1f2937;
-  margin-bottom: 1.5rem;
-}
-
-.form-section form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.form-section input,
-.form-section select,
-.form-section button {
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.form-section button {
-  background: linear-gradient(135deg, #000000, #1f2937);
-  color: white;
+  font-size: 2.5rem; /* Larger toggle icon */
+  color: #f9fafb;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.form-section button:hover {
-  background: linear-gradient(135deg, #000000, #1f2937);
+/* Fix body padding to accommodate navbar */
+body {
+  padding-top: 0 !important; /* Remove top padding */
+  margin: 0;
 }
 
-.schedule-section table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background-color: #fff;
+/* Adjust main content to account for navbar */
+main {
+  padding-top: 2rem;
 }
 
-.schedule-section th,
-.schedule-section td {
-  border: 1px solid #ddd;
-  padding: 1rem;
-  text-align: center;
-}
-
-.schedule-section th {
-   background: linear-gradient(135deg, #000000, #1f2937);
-  color: white;
+/* Add responsive styles */
+@media (max-width: 768px) {
+  .navbar-menu-toggle {
+    display: block;
+  }
+  
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #1f2937;
+    padding: 1.5rem;
+  }
+  
+  .navbar-links.active {
+    display: flex;
+  }
+  
+  .navbar-links li a {
+    padding: 0.75rem 0;
+    font-size: 1.2rem;
+  }
 }
