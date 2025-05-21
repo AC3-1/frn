@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Scheduler</title>
+  <link rel="stylesheet" href="employee1.css" />
+</head>
+<body>
+    <nav class="navbar">
+    <div class="container nav-container">
+      <a href = "front.html"><div class="logo">frn.</div> </a>
+      <div class="menu-toggle" id="menuToggle">&#9776;</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#journal">Journal</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  <header>
+    <h1> <center> Employee Scheduling</h1></center>
+  </header>
+
+  <main>
+   <section class="scheduler fade-in" id="scheduler">
+  <div class="form-section">
+    <h2>Assign Shift</h2>
+    <form id="shift-form">
+      <input type="text" id="employee-name" placeholder="Employee Name" required />
+      <select id="day">
+        <option value="">Select Day</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+      </select>
+      <select id="shift">
+        <option value="">Select Shift</option>
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Evening">Evening</option>
+      </select>
+      <button type="submit">Assign</button>
+    </form>
+  </div>
+
+  <div class="schedule-section">
+    <h2>Weekly Schedule</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Morning</th>
+          <th>Afternoon</th>
+          <th>Evening</th>
+        </tr>
+      </thead>
+      <tbody id="schedule-table">
+        <tr><td>Monday</td><td></td><td></td><td></td></tr>
+        <tr><td>Tuesday</td><td></td><td></td><td></td></tr>
+        <tr><td>Wednesday</td><td></td><td></td><td></td></tr>
+        <tr><td>Thursday</td><td></td><td></td><td></td></tr>
+        <tr><td>Friday</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+  </main>
+
+  <script>
+    document.getElementById("shift-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("employee-name").value.trim();
+      const day = document.getElementById("day").value;
+      const shift = document.getElementById("shift").value;
+
+      if (!name || !day || !shift) return;
+
+      const rows = document.querySelectorAll("#schedule-table tr");
+      rows.forEach(row => {
+        if (row.children[0].textContent === day) {
+          const shiftIndex = { Morning: 1, Afternoon: 2, Evening: 3 };
+          row.children[shiftIndex[shift]].textContent = name;
+        }
+      });
+
+      document.getElementById("shift-form").reset();
+    });
+  </script>
+</body>
+</html>
